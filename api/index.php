@@ -49,4 +49,26 @@ $app->booted(function () use ($app) {
     $app['url']->forceScheme('https');
 });
 
+// Diagnostik sementara untuk membaca penyebab error di Vercel.
+$app->booted(function () use ($app) {
+    $handler = $app->make(
+        \Illuminate\Contracts\Debug\ExceptionHandler::class
+    );
+
+    $handler->reportable(function (\Throwable $e) {
+        $message = str_replace(
+            ["\r", "\n"],
+            ' ',
+            $e->getMessage()
+        );
+
+        error_log(
+            'GKI_ERROR: ' . get_class($e)
+            . ' | ' . substr($message, 0, 1500)
+        );
+
+        return false;
+    });
+});
+
 $app->handleRequest(Request::capture());
