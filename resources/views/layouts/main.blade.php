@@ -59,9 +59,21 @@
                 </li>
             </ul>
 
-            <button class="btn-login" type="button">
-                Login
-            </button>
+            @auth
+                @if (auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="btn-login">
+                        Dashboard Admin
+                    </a>
+                @else
+                    <a href="{{ route('jemaat.account') }}" class="btn-login">
+                        Akun Saya
+                    </a>
+                @endif
+            @else
+                <a href="{{ route('login') }}" class="btn-login">
+                    Login
+                </a>
+            @endauth
         </div>
     </nav>
 

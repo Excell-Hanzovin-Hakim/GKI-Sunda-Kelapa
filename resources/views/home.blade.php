@@ -148,7 +148,7 @@
                 </p>
                 <dl class="schedule-details">
                     <div><dt>Hari</dt><dd>Minggu</dd></div>
-                    <div><dt>Waktu</dt><dd>07.30 WIB/dd></div>
+                    <div><dt>Waktu</dt><dd>07.30 WIB</dd></div>
                     <div><dt>Lokasi</dt><dd>Ruangan Ibadah</dd></div>
                 </dl>
                 <p class="card-footer">Kebaktian Umum</p>
@@ -227,41 +227,67 @@
                     aria-controls="news-grid"
                 >Kegiatan</button>
             </div>
-            <p class="demo-label">Konten contoh untuk presentasi</p>
+            <p class="demo-label">
+                @if ($wartas->isEmpty())
+                    Belum ada warta yang diterbitkan.
+                @else
+                    {{ $wartas->count() }} warta tersedia
+                @endif
+            </p>
         </div>
 
         <p class="sr-only" id="filter-status" role="status"></p>
 
         <div class="news-grid" id="news-grid">
-            <!-- WARTA -->
-            <article class="news-card" data-category="warta">
-                <div class="news-cover cover-warta">
-                    <span class="cover-kicker">GKI Sunda Kelapa</span>
-                    <p class="cover-title">Warta<br>Jemaat.</p>
-                    <span class="cover-footnote">Bertumbuh bersama dalam iman</span>
-                </div>
 
-                <div class="news-card-body">
-                    <div class="news-meta">
-                        <span class="news-badge">Warta</span>
-                        
-                    </div>
-                    <h3>Warta Jemaat Mingguan</h3>
-                    <p class="news-excerpt">
-                        Ringkasan informasi ibadah, pengumuman,
-                        dan kabar pelayanan untuk jemaat.
-                    </p>
-                    <button
-                        class="text-link news-detail-btn"
-                        type="button"
-                        data-news="warta-mingguan"
-                        aria-haspopup="dialog"
-                        aria-label="Baca selengkapnya: Warta Jemaat Mingguan"
-                    >
-                        Baca Selengkapnya <span aria-hidden="true">&rarr;</span>
-                    </button>
-                </div>
-            </article>
+            <!-- WARTA DARI DATABASE -->
+@foreach ($wartas as $warta)
+    <article class="news-card" data-category="warta">
+        <div class="news-cover cover-warta">
+            <span class="cover-kicker">
+                GKI Sunda Kelapa
+            </span>
+
+            <p class="cover-title">
+                Warta<br>Jemaat.
+            </p>
+
+            <span class="cover-footnote">
+                Edisi {{ $warta->edition_date->format('d/m/Y') }}
+            </span>
+        </div>
+
+        <div class="news-card-body">
+            <div class="news-meta">
+                <span class="news-badge">Warta</span>
+
+                <time datetime="{{ $warta->edition_date->format('Y-m-d') }}">
+                    {{ $warta->edition_date->format('d/m/Y') }}
+                </time>
+            </div>
+
+            <h3>{{ $warta->title }}</h3>
+
+            <p class="news-excerpt">
+                {{ \Illuminate\Support\Str::limit(
+                    $warta->summary ?: 'Baca informasi ibadah, pengumuman, dan kabar pelayanan dalam PDF warta jemaat.',
+                    180
+                ) }}
+            </p>
+
+            <a
+                href="{{ route('warta.pdf', $warta) }}"
+                class="text-link"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Baca PDF
+                <span aria-hidden="true">&#8599;</span>
+                <span class="sr-only">(dibuka di tab baru)</span>
+            </a>
+        </div>
+    </article>
+@endforeach
 
             <!-- KEGIATAN 1 -->
             <article class="news-card" data-category="kegiatan">
@@ -297,7 +323,7 @@
                 <div class="news-cover cover-service">
                     <span class="cover-kicker">GKI Sunda Kelapa</span>
                     <p class="cover-title">GEBER<br>Gerakan Berdoa.</p>
-                    <span class="cover-footnote">Setiap Hari Rabu 20.00 WIB (online)</span>
+                    <span class="cover-footnote">Setiap Hari pukul 20.00 WIB (online)</span>
                 </div>
 
                 <div class="news-card-body">

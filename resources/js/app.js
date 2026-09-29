@@ -77,21 +77,6 @@ function initChurchWebsite() {
 
     updateSlideshow();
 
-    // PESAN LOGIN DEMO
-    const loginNote = document.querySelector("#login-note");
-    let toastTimer;
-
-    document.querySelector(".btn-login").addEventListener("click", () => {
-        closeMenu();
-        window.clearTimeout(toastTimer);
-        loginNote.textContent = "Halaman Login Pengurus sedang disiapkan.";
-        loginNote.classList.add("is-visible");
-
-        toastTimer = window.setTimeout(() => {
-            loginNote.classList.remove("is-visible");
-        }, 4000);
-    });
-
     // FILTER WARTA / KEGIATAN
     const filterButtons = document.querySelectorAll(".filter-btn");
     const newsCards = document.querySelectorAll(".news-card");
